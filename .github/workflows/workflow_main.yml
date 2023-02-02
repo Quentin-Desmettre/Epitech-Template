@@ -40,6 +40,8 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.4
         with:
           ssh-private-key: ${{ secrets.SSH_KEY }}
+      - name: Config hosts
+        run: "echo '${{ secrets.KNOWN_HOSTS }}' > ~/.ssh/known_hosts"
 
       - name: Push to Epitech
         run: "git remote add epiRepo git@github.com:Quentin-Desmettre/criterion.git && git push epiRepo main"
