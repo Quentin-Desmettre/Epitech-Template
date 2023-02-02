@@ -26,4 +26,7 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_KEY }}
 
       - name: Push to Epitech
-        run: "git remote add epiRepo git@github.com:Quentin-Desmettre/criterion.git && git push epiRepo ${GITHUB_REF#refs/heads/}"
+        run: |
+          git remote add epiRepo git@github.com:Quentin-Desmettre/criterion.git
+          git fetch --unshallow
+          git push epiRepo main
