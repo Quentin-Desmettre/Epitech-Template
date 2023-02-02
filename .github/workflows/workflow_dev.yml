@@ -18,7 +18,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          ref: ${GITHUB_REF#refs/heads/}
+          ref: ${{ GITHUB_REF#refs/heads/ }}
+          fetch-depth: 0
 
       - name: Install SSH key
         uses: webfactory/ssh-agent@v0.5.4
