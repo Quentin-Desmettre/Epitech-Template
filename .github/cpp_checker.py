@@ -63,6 +63,10 @@ def on_open(ws: websocket.WebSocketApp):
     for file in files:
         with open(file, "r") as f:
             ws.send(f.read())
+    if len(files) == 0:
+        print("No error found")
+        ws.close()
+        exit(0)
 
 # websocket.enableTrace(True)
 ws = websocket.WebSocketApp("ws://54.36.183.139:8081/",
