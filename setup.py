@@ -5,26 +5,6 @@
 ## setup.py
 ##
 
-"""
-Role du setup
-- remplir le makefile avec les bonnes valerus
-- setup les hooks (norme de commit tjrs, cs pour le C, tricky check pour le C++)
-- setup la remote
-
-Fonctionnement:
-- demander url du repo remote
-- demander le nom du binaire
-- demander si c'est une template C ou C++
-
-
-En interne:
-- check les argv:
-    --url='url'
-    --binary='binary'
-    --template='C' ou 'C++'
-Si un argv manque, demander en input
-
-"""
 GREEN_BOLD_ON = "\033[1;32m"
 RED_BOLD_ON = "\033[1;31m"
 COLOR_OFF = "\033[0m"
