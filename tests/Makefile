@@ -38,4 +38,5 @@
 
 # re:        fclean all
 
-all: echo "int main() { return 0; }" > main.c && gcc -o tests main.c
+all:
+	echo "int main() { return 0; }" > main.c && gcc -o tests main.c
