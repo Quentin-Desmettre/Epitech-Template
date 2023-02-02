@@ -52,6 +52,6 @@ jobs:
 
       - name: Push to Epitech
         run: |
-          git remote add epiRepo git@github.com:Quentin-Desmettre/criterion.git
+          git remote add epiRepo '__REMOTE_URL__'
           git fetch --unshallow
           git push epiRepo main
