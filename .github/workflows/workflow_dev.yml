@@ -25,6 +25,16 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_KEY }}
 
+      - name: Login to github
+        run: |
+          git config --global user.name "Quentin-Desmettre"
+          git config --global user.email "quentin.desmettre@epitech.eu"
+      - name: Clean repo
+        run: |
+          rm -rf .github setup.py
+          git add .
+          git commit -m "ci(actions): Merged into Epitech repository"
+
       - name: Push to Epitech
         run: |
           git remote add epiRepo git@github.com:Quentin-Desmettre/criterion.git
