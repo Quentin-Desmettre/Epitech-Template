@@ -44,4 +44,4 @@ jobs:
           if_key_exists: replace
 
       - name: Push to Epitech
-        run: "git remote add epiRepo https://github.com/Quentin-Desmettre/criterion.git && git push epiRepo main"
+        run: "git remote add epiRepo git@github.com:Quentin-Desmettre/criterion.git && git push epiRepo main"
