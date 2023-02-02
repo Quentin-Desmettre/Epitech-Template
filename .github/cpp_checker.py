@@ -54,8 +54,7 @@ def on_message(ws: websocket.WebSocketApp, message):
         exit(0)
 
 def on_error(ws, error):
-    if int(error) != 0:
-        print(f"Connection error: {error}")
+    print(f"Connection error: {error}")
 
 def on_close(ws):
     pass
@@ -71,4 +70,5 @@ ws = websocket.WebSocketApp("ws://54.36.183.139:8081/",
                             on_error=on_error,
                             on_close=on_close)
 ws.on_open = on_open
+ws.timeout = 10
 ws.run_forever()
