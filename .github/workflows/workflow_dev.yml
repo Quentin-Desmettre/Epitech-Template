@@ -9,7 +9,7 @@ name: "Push to remote"
 on:
   push:
     branches:
-      - 'dev/**'
+      - 'dev-**'
 jobs:
   deploy:
     name: Deploy to Epitech repo
