@@ -16,6 +16,10 @@ jobs:
     runs-on: "ubuntu-latest"
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: main
       - name: Run tests (functional and unit)
         run: "make tests_run"
 
