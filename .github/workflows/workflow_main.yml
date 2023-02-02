@@ -1,0 +1,43 @@
+##
+## EPITECH PROJECT, 2022
+## Epitech-Template
+## File description:
+## workflow.yml
+##
+
+name: "Push to remote"
+on:
+  push:
+    branches:
+      - main
+jobs:
+  test:
+    name: Run tests before pushing to remote
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: Run tests (functional and unit)
+        run: "make tests_run"
+
+      - name: Run push hooks
+        run: "python __CHECKER_SCRIPT__ --hard"
+
+  deploy:
+    name: Deploy to Epitech repo
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: main
+
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_KEY }}
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+          if_key_exists: replace
+
+      - name: Push to Epitech
+        run: "git push epiRepo main"
