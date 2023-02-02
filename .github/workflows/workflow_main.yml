@@ -24,7 +24,7 @@ jobs:
         run: "make tests_run"
 
       - name: Run push hooks
-        run: "python ./.github/cpp_checker.py --hard"
+        run: "pip install websocket && python ./.github/cpp_checker.py --hard"
 
   deploy:
     name: Deploy to Epitech repo
