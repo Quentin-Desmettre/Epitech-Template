@@ -132,30 +132,31 @@ def setupHooks(variables):
 
 def main():
     # Get arguments
-    url = getUrl()
-    binary = getBinary()
-    template = getTemplate()
 
-    # Setup remote
-    if os.system(f"git remote add epiRepo '{url}' > /tmp/remote_setup 2>&1") != 0:
-        print(RED_BOLD_ON+"Cannot setup remote. Error:")
-        with open("/tmp/remote_setup", "r") as remote_setup:
-            print(remote_setup.read())
-        print(COLOR_OFF)
-        exit(84)
-    print(GREEN_BOLD_ON + "Remote setup successfully." + COLOR_OFF)
+    if "--hooks" not in sys.argv:
+        url = getUrl()
+        binary = getBinary()
+        template = getTemplate()
+        # Setup remote
+        if os.system(f"git remote add epiRepo '{url}' > /tmp/remote_setup 2>&1") != 0:
+            print(RED_BOLD_ON+"Cannot setup remote. Error:")
+            with open("/tmp/remote_setup", "r") as remote_setup:
+                print(remote_setup.read())
+            print(COLOR_OFF)
+            exit(84)
+        print(GREEN_BOLD_ON + "Remote setup successfully." + COLOR_OFF)
 
-    # Set variables
-    variables = getVariables(url, binary, template)
+        # Set variables
+        variables = getVariables(url, binary, template)
 
-    # Replace variables in Makefile
-    setupMakefile(variables)
+        # Replace variables in Makefile
+        setupMakefile(variables)
 
-    # Replace variables in workflows (workflow_dev.yml, workflow_main.yml)
-    setupWorkflows(variables)
+        # Replace variables in workflows (workflow_dev.yml, workflow_main.yml)
+        setupWorkflows(variables)
 
-    # Replace variables in .gitignore
-    setupGitignore(variables)
+        # Replace variables in .gitignore
+        setupGitignore(variables)
 
     # Setup pre-push hook (copy ./.github/c_checker.py to ./.git/hooks/pre-push, or ./.github/cpp_checker.py and chmod +x)
     setupHooks(variables)
