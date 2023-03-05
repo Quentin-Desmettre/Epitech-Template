@@ -34,4 +34,4 @@ vgcore.*
 *.app
 build
 
-__BINARY_NAME__
+helloworld

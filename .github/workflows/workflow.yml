@@ -43,7 +43,7 @@ jobs:
         run: "make tests_run"
 
       - name: Run push hooks
-        run: "pip install websocket-client && python '__CHECKER_SCRIPT__' --hard"
+        run: "pip install websocket-client && python './.github/c_checker.py' --hard"
 
   deploy:
     name: Deploy to Epitech repo
@@ -88,6 +88,6 @@ jobs:
           ssh staging "cd $DIRNAME && git checkout $BRANCH && git pull"
           ssh staging "cd $DIRNAME && git config --global user.name 'Github Pipeline' && git config --global user.email 'quentin.desmettre@epitech.eu'"
           ssh staging "cd $DIRNAME && (git remote rm epiRepo || true)"
-          ssh staging "cd $DIRNAME && git remote add epiRepo '__REMOTE_URL__'"
+          ssh staging "cd $DIRNAME && git remote add epiRepo 'git@github.com:EpitechPromo2026/B-PDG-300-LIL-3-1-PDGD13-quentin.desmettre.git'"
           ssh staging "cd $DIRNAME && (git fetch --unshallow || true) && git fetch --all && git fetch epiRepo && git fetch epiRepo $BRANCH"
           ssh staging "cd $DIRNAME && git push epiRepo $BRANCH -f"
