@@ -137,14 +137,6 @@ def main():
         url = getUrl()
         binary = getBinary()
         template = getTemplate()
-        # Setup remote
-        if os.system(f"git remote add epiRepo '{url}' > /tmp/remote_setup 2>&1") != 0:
-            print(RED_BOLD_ON+"Cannot setup remote. Error:")
-            with open("/tmp/remote_setup", "r") as remote_setup:
-                print(remote_setup.read())
-            print(COLOR_OFF)
-            exit(84)
-        print(GREEN_BOLD_ON + "Remote setup successfully." + COLOR_OFF)
 
         # Set variables
         variables = getVariables(url, binary, template)
