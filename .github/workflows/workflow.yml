@@ -72,6 +72,7 @@ jobs:
             IdentityFile ~/.ssh/staging.key
             StrictHostKeyChecking no
           END
+
         env:
           SSH_USER: ${{ secrets.STAGING_SSH_USER }}
           SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
@@ -80,9 +81,9 @@ jobs:
       - name: Push to Epitech
         run: |
           echo git clone "git@github.com:$GITHUB_REPOSITORY.git"
-          ssh staging 'git clone "git@github.com:$GITHUB_REPOSITORY.git"'
-          ssh staging 'cd $(basename $GITHUB_REPOSITORY) && git checkout ${{ steps.extract_branch.outputs.branch }} && git pull'
-          ssh staging 'cd $(basename $GITHUB_REPOSITORY) && git config --global user.name "Github Pipeline" && git config --global user.email "quentin.desmettre@epitech.eu"'
-          ssh staging 'cd $(basename $GITHUB_REPOSITORY) && git remote add epiRepo "git@github.com:EpitechPromo2026/B-PDG-300-LIL-3-1-PDGD13-quentin.desmettre.git"'
-          ssh staging 'cd $(basename $GITHUB_REPOSITORY) && git fetch --unshallow'
-          ssh staging 'cd $(basename $GITHUB_REPOSITORY) && git push epiRepo ${{ steps.extract_branch.outputs.branch }}'
+          ssh staging "git clone 'git@github.com:$GITHUB_REPOSITORY.git'"
+          ssh staging "cd $(basename $GITHUB_REPOSITORY) && git checkout ${{ steps.extract_branch.outputs.branch }} && git pull"
+          ssh staging "cd $(basename $GITHUB_REPOSITORY) && git config --global user.name 'Github Pipeline' && git config --global user.email 'quentin.desmettre@epitech.eu'"
+          ssh staging "cd $(basename $GITHUB_REPOSITORY) && git remote add epiRepo 'git@github.com:EpitechPromo2026/B-PDG-300-LIL-3-1-PDGD13-quentin.desmettre.git'"
+          ssh staging "cd $(basename $GITHUB_REPOSITORY) && git fetch --unshallow"
+          ssh staging "cd $(basename $GITHUB_REPOSITORY) && git push epiRepo ${{ steps.extract_branch.outputs.branch }}"
