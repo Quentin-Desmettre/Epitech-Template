@@ -6,6 +6,7 @@ vgcore.*
 tokens.txt
 logs.log
 __pycache__
+websockets
 
 # Compiled Object files
 *.slo
@@ -38,4 +39,4 @@ __pycache__
 *.app
 build
 
-helloworld
+__BINARY_NAME__
