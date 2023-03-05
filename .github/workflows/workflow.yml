@@ -30,6 +30,9 @@ jobs:
           ref: ${{ steps.extract_branch.outputs.branch }}
           fetch-depth: 0
 
+      - name: Run push hooks
+        run: "pip install websocket-client && python './.github/c_checker.py' --hard"
+
       - name: Check if it compiles
         shell: bash
         run: |
@@ -41,9 +44,6 @@ jobs:
 
       - name: Run tests (functional and unit)
         run: "make tests_run"
-
-      - name: Run push hooks
-        run: "pip install websocket-client && python './.github/c_checker.py' --hard"
 
   deploy:
     name: Deploy to Epitech repo
