@@ -80,6 +80,12 @@ def setupMakefile(variables):
                 makefile_content = makefile_content.replace(variable, variables[variable])
             with open("Makefile", "w") as makefile:
                 makefile.write(makefile_content)
+        with open("tests/Makefile", "r") as makefile:
+            makefile_content = makefile.read()
+            for variable in variables:
+                makefile_content = makefile_content.replace(variable, variables[variable])
+            with open("tests/Makefile", "w") as makefile:
+                makefile.write(makefile_content)
     except:
         print(RED_BOLD_ON + "Cannot setup Makefile.")
         print(COLOR_OFF)
