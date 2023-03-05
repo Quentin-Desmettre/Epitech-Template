@@ -2,6 +2,10 @@
 a.out
 vgcore.*
 .vscode
+.idea
+tokens.txt
+logs.log
+__pycache__
 
 # Compiled Object files
 *.slo
