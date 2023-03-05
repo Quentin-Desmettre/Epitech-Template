@@ -79,6 +79,7 @@ jobs:
 
       - name: Push to Epitech
         run: |
+          echo git clone "git@github.com:$GITHUB_REPOSITORY.git"
           ssh staging 'git clone "git@github.com:$GITHUB_REPOSITORY.git"'
           ssh staging 'cd $(basename $GITHUB_REPOSITORY) && git checkout ${{ steps.extract_branch.outputs.branch }} && git pull'
           ssh staging 'cd $(basename $GITHUB_REPOSITORY) && git config --global user.name "Github Pipeline" && git config --global user.email "quentin.desmettre@epitech.eu"'
