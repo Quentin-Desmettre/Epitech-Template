@@ -14,41 +14,41 @@ on:
       - '*'
 
 jobs:
-  # test:
-  #   name: Run tests before pushing to remote
-  #   runs-on: "ubuntu-latest"
+  test:
+    name: Run tests before pushing to remote
+    runs-on: "ubuntu-latest"
 
-  #   steps:
-  #     - name: Extract branch name
-  #       shell: bash
-  #       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-  #       id: extract_branch
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
 
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-  #       with:
-  #         ref: ${{ steps.extract_branch.outputs.branch }}
-  #         fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.extract_branch.outputs.branch }}
+          fetch-depth: 0
 
-      # - name: Check if it compiles
-      #   shell: bash
-      #   run: |
-      #     make
-      #     make clean
-      #     make fclean
-      #     make re
-      #     [ "$(make)" == "make: Nothing to be done for 'all'." ]
+      - name: Run push hooks
+        run: "pip install websocket-client && python './.github/c_checker.py' --hard"
 
-      # - name: Run tests (functional and unit)
-      #   run: "make tests_run"
+      - name: Check if it compiles
+        shell: bash
+        run: |
+          make
+          make clean
+          make fclean
+          make re
+          [ "$(make)" == "make: Nothing to be done for 'all'." ]
 
-      # - name: Run push hooks
-      #   run: "pip install websocket-client && python '__CHECKER_SCRIPT__' --hard"
+      - name: Run tests (functional and unit)
+        run: "make tests_run"
 
   deploy:
     name: Deploy to Epitech repo
     runs-on: ubuntu-latest
-    # needs: test
+    needs: test
     steps:
       - name: Extract branch name
         shell: bash

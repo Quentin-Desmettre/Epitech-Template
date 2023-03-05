@@ -88,7 +88,7 @@ def setupMakefile(variables):
 
 def setupWorkflows(variables):
     try:
-        for workflow in ["workflow_dev.yml", "workflow_main.yml"]:
+        for workflow in ["workflow.yml"]:
             filename = ".github/workflows/" + workflow
             with open(filename, "r") as workflow_file:
                 workflow_content = workflow_file.read()

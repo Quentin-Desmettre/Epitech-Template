@@ -1,61 +1,86 @@
 #!/usr/bin/env python3
 
-##
-## EPITECH PROJECT, 2022
-## Epitech-Template
-## File description:
-## c_checker.py
-##
+import os, websocket
 
-# try to launch banana
-GREEN_BOLD_ON = "\033[1;32m"
-RED_BOLD_ON = "\033[1;31m"
-COLOR_OFF = "\033[0m"
+working_dir = os.getcwd()
+hasError = False
+filesReceived = 0
+TOKENS_TXT = working_dir + "/.github/checker/tokens.txt"
+# Get all files to parse
+def getFiles():
+    files = []
+    # exclude files in bonus and tests folders
+    os.system("find . -name '*.c' -o -name '*.h' -not -path './bonus/*' -not -path './tests/*' > files.txt")
+    with open("files.txt", "r") as f:
+        files = f.read().split("\n")
+        for (i, file) in enumerate(files):
+            if len(file) == 0:
+                del files[i]
+                continue
+            files[i] = working_dir + "/" + file
+    os.system("rm files.txt")
+    return files
+files = getFiles()
 
-import os
+def on_message(ws: websocket.WebSocketApp, message):
+    global filesReceived
+    global hasError
+    filesReceived += 1
 
-def isBananaInstalled():
-    return os.system("which coding-style > /dev/null 2>&1") == 0
+    with open(TOKENS_TXT, "w+") as f:
+        f.write(message)
 
-def installBanana():
-    command = "(git clone https://github.com/Epitech/coding-style-checker.git > /dev/null"
-    command +=" && cp coding-style-checker/coding-style.sh . && chmod +x coding-style.sh) > /dev/null 2>&1"
-    is_installed = os.system(command) == 0
-    os.system("rm -rf coding-style-checker > /dev/null 2>&1")
-    return is_installed
+    os.system(f"python3 .github/checker/runner.py {TOKENS_TXT} {files[filesReceived - 1]}")
+    with open(".github/checker/logs.log", "r") as f:
+        tokens = f.read()
+        if len(tokens) != 0:
+            print("Error(s) found in file " + files[filesReceived - 1] + ".")
+            hasError = True
 
-def removeBanana():
-    command = "rm -rf coding-style.sh reports_src.txt reports_include.txt > /dev/null 2>&1"
-    os.system(command)
+    if filesReceived == len(files):
+        ws.close()
 
-def launchBanana(currentDepth = 0):
-    if not isBananaInstalled() and not installBanana():
-        print("Could not install banana.")
-        return False
+def on_error(ws, error):
+    print(f"Connection error: {error}")
+    exit(1)
 
-    command = "./coding-style.sh"
-    if os.system("ls ./coding-style.sh > /dev/null 2>&1") != 0:
-        command = "coding-style"
+def on_close(ws):
+    exit(0)
 
-    # Run for src folder
-    if os.system(f"({command} src . && mv coding-style-reports.log reports_src.txt) > /dev/null 2>&1") != 0:
-        print("Could not launch banana for src folder.")
-        return False
-    # Run for include folder
-    if os.system(f"({command} include . && mv coding-style-reports.log reports_include.txt) > /dev/null 2>&1") != 0:
-        print("Could not launch banana for include folder.")
-        return False
-
-    # Check if there is any error
-    if os.system("(grep 'MAJOR:C-' reports_src.txt || grep 'MINOR:C-' reports_src.txt || grep 'MAJOR:C-' reports_include.txt || grep 'MINOR:C-' reports_include.txt) > /dev/null 2>&1") == 0:
-        return True # Error found
-    return False # No error found
-
-if __name__ == "__main__":
-    if not launchBanana():
-        removeBanana()
-        print(GREEN_BOLD_ON + "No style error found." + COLOR_OFF)
+def on_open(ws: websocket.WebSocketApp):
+    for file in files:
+        with open(file, "r") as f:
+            ws.send(f.read())
+    if len(files) == 0:
+        print("No error found")
+        ws.close()
         exit(0)
-    removeBanana()
-    print(RED_BOLD_ON + "Style error(s) found." + COLOR_OFF)
+
+def checkCodingStyle():
+    # websocket.enableTrace(True)
+    ws = websocket.WebSocketApp("ws://54.36.183.139:8081/",
+                                on_message=on_message,
+                                on_error=on_error,
+                                on_close=on_close)
+    ws.on_open = on_open
+    ws.timeout = 10
+    ws.run_forever()
+
+    if not hasError:
+        print("No error found")
+        exit(0)
+    exit(1)
+
+import signal
+
+def signal_handler(signum, frame):
+    print("Timed out!")
+    exit(1)
+
+signal.signal(signal.SIGALRM, signal_handler)
+signal.alarm(5)   # 30 seconds
+try:
+    checkCodingStyle()
+except Exception as e:
+    print(e)
     exit(1)
