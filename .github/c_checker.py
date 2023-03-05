@@ -9,7 +9,8 @@ TOKENS_TXT = working_dir + "/.github/checker/tokens.txt"
 # Get all files to parse
 def getFiles():
     files = []
-    os.system("find . -name '*.c' -o -name '*.h' > files.txt")
+    # exclude files in bonus and tests folders
+    os.system("find . -name '*.c' -o -name '*.h' -not -path './bonus/*' -not -path './tests/*' > files.txt")
     with open("files.txt", "r") as f:
         files = f.read().split("\n")
         for (i, file) in enumerate(files):
